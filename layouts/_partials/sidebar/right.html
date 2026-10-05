@@ -1,0 +1,31 @@
+{{/*
+    渲染右侧组件，并隐藏没有数据的归档、分类和标签。
+    参数：Context 为当前页面，Scope 为组件配置名称，默认 homepage。
+    输出：侧栏 HTML；组件模板不存在时沿用主题的构建警告。
+*/}}
+{{- $scope := default "homepage" .Scope -}}
+{{- $context := .Context -}}
+{{- $pages := partial "helper/pages.html" $context.Site.Home -}}
+{{- with (index $context.Site.Params.widgets $scope) -}}
+    <aside class="sidebar right-sidebar sticky">
+        {{ range . }}
+            {{- $show := true -}}
+            {{/* 保留配置，首篇正式文章发布后相关组件会自动出现。 */}}
+            {{- if eq .type "archives" -}}
+                {{- $show = gt (len $pages) 0 -}}
+            {{- else if eq .type "categories" -}}
+                {{- $show = gt (len $context.Site.Taxonomies.categories) 0 -}}
+            {{- else if eq .type "tag-cloud" -}}
+                {{- $show = gt (len $context.Site.Taxonomies.tags) 0 -}}
+            {{- end -}}
+            {{- if $show -}}
+                {{ if templates.Exists (printf "_partials/widget/%s.html" .type) }}
+                    {{- $params := default dict .params -}}
+                    {{ partial (printf "widget/%s" .type) (dict "Context" $context "Params" $params) }}
+                {{ else }}
+                    {{ warnf "未找到侧栏组件：%s" .type }}
+                {{ end }}
+            {{- end -}}
+        {{ end }}
+    </aside>
+{{ end }}

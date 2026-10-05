@@ -3,6 +3,8 @@ locale  = "zh"
 title   = "CoKiE_z的游戏开发博客"
 
 defaultContentLanguage = "zh"
+# 无时区的文章日期按北京时间解释，与部署环境保持一致。
+timeZone = "Asia/Shanghai"
 
 hasCJKLanguage = true
 

@@ -1,0 +1,22 @@
+{{/* 首页沿用 Stack 的文章列表；没有已发布文章时显示提示，不生成占位文章。 */}}
+{{ define "main" }}
+    {{- $paginator := partial "helper/paginator.html" . -}}
+    <section class="article-list">
+        {{ range $paginator.Pages }}
+            {{ partial "article-list/default" . }}
+        {{ else }}
+            <article>
+                <div class="article-details">
+                    <h1 class="article-title">游戏开发笔记，正在准备中</h1>
+                    <p class="article-subtitle">这里将记录 Unity 游戏开发、算法学习与项目实践。</p>
+                </div>
+            </article>
+        {{ end }}
+    </section>
+    {{- partial "pagination.html" . -}}
+    {{- partial "footer/footer" . -}}
+{{ end }}
+
+{{ define "right-sidebar" }}
+    {{ partial "sidebar/right.html" (dict "Context" . "Scope" "homepage") }}
+{{ end }}

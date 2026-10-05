@@ -1,47 +1,119 @@
-<img align="right" width="150" alt="logo" src="https://user-images.githubusercontent.com/5889006/190859553-5b229b4f-c476-4cbd-928f-890f5265ca4c.png">
+# CoKiE_z 的游戏开发博客
 
-# Hugo Theme Stack Starter Template
+记录 Unity 游戏开发、算法学习与项目实践。网站地址：<https://cokiez.github.io/>。
 
-This is a quick start template for [Hugo theme Stack](https://github.com/CaiJimmy/hugo-theme-stack). It uses [Hugo modules](https://gohugo.io/hugo-modules/) feature to load the theme.
+本站使用 Hugo + [Stack](https://github.com/CaiJimmy/hugo-theme-stack)，通过 GitHub Actions 部署到 GitHub Pages。文章写在 `content/post/`，每篇文章一个文件夹，正文使用 Markdown。
 
-It comes with a basic theme structure and configuration. GitHub action has been set up to deploy the theme to a public GitHub page automatically. Also, there's a cron job to update the theme automatically everyday.
+## 1. 新建文章
 
-## Video Tutorial
+在仓库目录打开 PowerShell：
 
-In case you got lost during the setup process, here's a video tutorial that setups a new Hugo site using this template, and deploys it to GitHub Pages: https://www.youtube.com/watch?v=8qDdQQ6Ifxo
-
-## Get started
-
-1. Click *Use this template*, and create your repository as `<username>.github.io` on GitHub. (You can also use a different repository name, but then the resulting website will be available at `https://<username>.github.io/<repository-name>`. )
-![Step 1](https://user-images.githubusercontent.com/5889006/156916624-20b2a784-f3a9-4718-aa5f-ce2a436b241f.png)
-
-2. Once the repository is created, create a GitHub codespace associated with it.
-![Create codespace](https://user-images.githubusercontent.com/5889006/156916672-43b7b6e9-4ffb-4704-b4ba-d5ca40ffcae7.png)
-
-3. While waiting for the codespace to be created, go to `Settings` -> `Pages` of your newly created repository, and set `Build and deployment` -> `Source` to `GitHub Actions`.
-![Change build and deployment source](https://github.com/user-attachments/assets/192459bf-25d8-441e-8029-c108d789e449)
-
-4. After the codespace is created, you can test that the site is built successfully by running `hugo server` in the terminal and see your new site in action. 
-
-5. Check `config` folder for the configuration files. You can edit them to suit your needs. Make sure to update the `baseurl` property in `config/_default/config.toml` to your site's URL. For example, if your new repository is named `my-blog`, then the `baseurl` should be `https://<username>.github.io/my-blog/`.
-
-6. Once you're done editing the site, just commit it and push it. GitHub action will deploy the site automatically to GitHub page asociated with the repository.
-
----
-
-In case you don't want to use GitHub codespace, you can also run this template in your local machine. **You need to install Git, Go and Hugo extended locally.** For more information, check official Hugo documentation: https://gohugo.io/installation/
-
-## Update theme manually
-
-Run:
-
-```bash
-hugo mod get -u github.com/CaiJimmy/hugo-theme-stack/v4
-hugo mod tidy
+```powershell
+# 进入仓库，后续命令均在这里执行。
+Set-Location 'E:\CoKiEz Blog\CoKiEz.github.io'
+# 如果当前终端找不到 hugo，使用本机已有程序的完整路径。
+$hugoExe = 'E:\Hugo\hugo_extended_0.167.0_windows-amd64\hugo.exe'
+# 使用中文注释的文章模板创建草稿，目录名建议使用英文和短横线。
+& $hugoExe new content post/unity-movement/index.md
 ```
 
-> This starter template has been configured with `v4` version of theme. Due to the limitation of Go module, once the `v4` or up version of theme is released, you need to update the theme manually. (Modifying `config/module.toml` file)
+如果已经把 Hugo 加入 PATH，可将 `& $hugoExe` 换成 `hugo`。本地需要 Git、Go 和 Hugo Extended；当前部署使用 Hugo Extended 0.167.0。
 
-## Deploy to another static page hostings
+打开生成的 `content/post/unity-movement/index.md`，修改标题、简介和正文。文件顶部两个 `---` 之间是文章配置，例如：
 
-Check official Hugo documentation: https://gohugo.io/host-and-deploy/
+```yaml
+---
+title: "Unity 角色移动实践"
+description: "记录角色移动的实现方法和遇到的问题。"
+# slug 决定文章网址，发布后尽量不要修改，也不要与其他文章重复。
+slug: "unity-movement"
+# 改成实际发布日期；+08:00 表示北京时间。
+date: 2026-10-05T20:00:00+08:00
+# 写作期间保留 true，正式发布前改为 false。
+draft: true
+# 没有封面时留空；有封面时填写同目录内的文件名。
+image: ""
+categories: ["Unity"]
+tags: ["C#", "角色控制"]
+math: false
+---
+```
+
+正文从第二个 `---` 后开始。使用 `## 小标题` 划分章节；代码块标明语言（例如 `csharp`），即可使用主题的代码高亮。
+
+新文章模板为 `archetypes/post.md`，以后想调整默认字段或章节，修改这个文件即可。生成时自动填写标题、slug、日期，并默认设置为草稿。详见 [Hugo 文章模板文档](https://gohugo.io/content-management/archetypes/)。
+
+## 2. 插入图片
+
+图片和 `index.md` 放在同一文件夹：
+
+```text
+content/post/unity-movement/
+├── index.md
+├── cover.jpg
+└── movement-demo.png
+```
+
+封面配置填写 `image: "cover.jpg"`；正文插图写成：
+
+```markdown
+![角色移动效果](movement-demo.png)
+```
+
+文章默认按发布日期从新到旧排序，不需要填写 `weight`。分类适合大方向，如 Unity、算法、项目实践；标签适合具体知识点，如对象池、动态规划。归档、分类、标签和搜索索引会在构建时自动更新，无需手工维护页面。
+
+## 3. 本地预览
+
+```powershell
+# 显示草稿并启动本地服务，按 Ctrl+C 停止。
+& $hugoExe server -D
+```
+
+访问终端显示的地址，通常是 <http://localhost:1313/>。保存文章后页面会自动刷新。
+
+`-D` 只包含草稿；如果 `date` 或 `publishDate` 在未来，需要使用 `server -D -F` 才能预览。正式构建默认排除草稿和未来文章。详见 [Hugo 构建与预览说明](https://gohugo.io/getting-started/usage/)。
+
+## 4. 正式发布
+
+1. 将文章的 `draft` 改为 `false`，确认发布日期不晚于当前时间。
+2. 检查标题、正文、图片、分类和标签。
+3. 构建并推送源文件：
+
+```powershell
+# 清理输出中的旧文件并检查正式构建；public 仅用于生成结果，不要手动存放源文件。
+& $hugoExe --cleanDestinationDir --minify
+# 确认变更只包含计划发布的内容，再暂存文章及其图片。
+git status --short
+git add content/post/unity-movement
+# 提交文章到本地仓库并推送；本仓库当前分支为 master。
+git commit -m "新增：Unity 角色移动实践"
+git push origin master
+```
+
+如果同时修改了配置或其他文件，需要将相应文件一起 `git add`。不要提交 `public/` 或 `resources/`，仓库已忽略这两个生成目录。
+
+4. 打开仓库的 [Actions 页面](https://github.com/CoKiEz/CoKiEz.github.io/actions)，确认 **Build and deploy** 工作流的 `build` 和 `deploy` 均成功。
+5. 访问文章地址，例如 `https://cokiez.github.io/p/unity-movement/`。
+
+工作流在推送到 `master` 或 `main` 时构建和部署，也支持手动运行。它不会替你编写或提交本地文章；本地修改需要先提交、推送，网站才会更新。现有的 **Update theme** 工作流仅负责更新主题依赖。
+
+未来日期文章不会到点自动上线：现有部署没有定时发布触发器，到时需重新推送或手动运行 **Build and deploy**。
+
+## 5. 不使用命令行发布
+
+也可以在 GitHub 仓库网页中选择 **Add file → Create new file**，输入 `content/post/文章英文名/index.md`，粘贴上面的文章配置和正文，将 `draft` 改为 `false`，再提交到 `master`。图片也上传到同一目录。提交会触发相同的部署流程。
+
+## 6. 修改与删除文章
+
+- 修改文章：编辑对应的 `index.md`，提交并推送。需要记录更新时间时可添加 `lastmod`，原始 `date` 可以保留。
+- 删除文章：删除对应的文章文件夹，提交并推送，部署后归档和搜索会同步更新，旧文章地址将返回 404。
+- 修改导航：`content/_index.md` 和 `content/page/` 下对应页面的 `menu` 配置。
+- 修改个人链接：`content/page/links/index.md`。
+- 修改博客名称：`config/_default/config.toml`。
+- 修改头像、简介和侧栏：`assets/img/avatar.jpg`、`config/_default/params.toml`。
+
+## 本次模板清理
+
+已移除五篇示例文章及其图片、示例分类和未启用的英文站点配置；导航已改为中文，链接页已换成个人 GitHub。归档保留，2022/2023 示例年份会随示例文章一起消失。
+
+尚无正式文章时，首页和归档显示提示，右侧自动隐藏空的归档、分类和标签。相关模板位于 `layouts/`，沿用 Stack 的列表与分页；更新主题后建议检查这些自定义模板的兼容性。没有额外创建占位博客。
