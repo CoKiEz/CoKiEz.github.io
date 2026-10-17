@@ -58,6 +58,28 @@ class ImportCompatibilityTest(unittest.TestCase):
         self.assertEqual(self.publisher._resolve(f"{self.root.name}/{self.image.name}", child)[0], self.image)
         self.assertEqual(self.publisher._resolve(f"../{self.image.name}", child)[0], self.image)
 
+    def test_punctuation_strong_preserves_quotes_and_nested_markdown(self) -> None:
+        """验证中文引号前后紧接文字时正确加粗，同时保留嵌套行内代码。"""
+        examples = {
+            '类比就是**“存档”、“读档”、“回档”**': '类比就是<strong>“存档”、“读档”、“回档”</strong>',
+            '都要先**“获取”**一次记录': '都要先<strong>“获取”</strong>一次记录',
+            '点击**“获取”更新**查看': '点击<strong>“获取”更新</strong>查看',
+            '**中文“引号”**继续': '<strong>中文“引号”</strong>继续',
+            '先**“使用 `git status`”**继续': '先<strong>“使用 `git status`”</strong>继续',
+            '普通**加粗**不改变': '普通**加粗**不改变',
+        }
+        for original, expected in examples.items():
+            with self.subTest(original=original):
+                self.assertEqual(self.publisher._markdown(original, self.source, self.bundle, "/p/test-import/"), expected)
+
+    def test_punctuation_strong_does_not_change_code_links_or_attributes(self) -> None:
+        """验证代码、转义星号、未闭合标记和链接/HTML 属性不会被误改。"""
+        text = '`先**“获取”**记录`\n\n```md\n先**“获取”**记录\n```\n\n先\\**“获取”**记录\n未闭合**“获取”\n<img alt="先**“获取”**记录" src="test.png">\n'
+        self.assertEqual(self.publisher._markdown(text, self.source, self.bundle, "/p/test-import/"), text)
+        target = 'https://example.com/path**“保留”**text'
+        converted = self.publisher._markdown(f'[链接](<{target}>)', self.source, self.bundle, "/p/test-import/")
+        self.assertEqual(converted, f'[链接](<{target}>)')
+
     def test_missing_ambiguous_and_unsafe_paths_fail(self) -> None:
         """验证缺失资源、同名文件和越界路径不会被静默发布。"""
         with self.assertRaises(FileNotFoundError):
@@ -87,7 +109,7 @@ class ImportCompatibilityTest(unittest.TestCase):
     def test_canvas_markdown_file_and_cross_canvas_links(self) -> None:
         """验证画布引用笔记时保留可加载的 Markdown、正文资源和完整笔记跳转。"""
         self.publisher.config["date"] = "2026-04-12T00:00:00+08:00"
-        self.note.write_text(f"---\ntags: [测试]\n---\n# 中文标题\n![[{self.image.name}]]\n", encoding="utf-8")
+        self.note.write_text(f"---\ntags: [测试]\n---\n# 中文标题\n先**“获取”**记录\n![[{self.image.name}]]\n", encoding="utf-8")
         peer = self.root / "另一张画布.canvas"
         peer.write_text('{"nodes":[],"edges":[]}', encoding="utf-8")
         self.publisher.pages[peer] = (self.bundle, "/canvas/test-import/peer/")
@@ -104,6 +126,7 @@ class ImportCompatibilityTest(unittest.TestCase):
         self.assertNotIn("tags:", body)
         self.assertIn("![", body)
         self.assertIn("%23", body)
+        self.assertIn('先<strong>“获取”</strong>记录', body)
         self.assertEqual(note["subpath"], "#中文标题")
         self.assertEqual(linked_canvas["file"], "../peer/")
 

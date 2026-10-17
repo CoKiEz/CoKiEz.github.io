@@ -11,6 +11,7 @@ import json
 from pathlib import Path
 import posixpath
 import re
+import unicodedata
 from urllib.parse import quote, unquote, urlsplit
 
 
@@ -22,6 +23,45 @@ WIKI = re.compile(r"(!?)\[\[([^\]\n]+)\]\]")
 # 支持尖括号地址及一层嵌套括号；更深的 Markdown 地址应使用尖括号写法。
 LINK = re.compile(r'(!?\[[^\]\n]*\]\()(<[^>\n]+>|(?:[^\s()]|\([^()]*\))+)([ \t]+["\'][^\n]*?["\'])?\)')
 REFERENCE = re.compile(r"(?m)^( {0,3}\[[^\]\n]+\]:[ \t]*)(<[^>\n]+>|\S+)")
+# 只识别非转义的成对双星号，跳过三重星号以及内容首尾的空白。
+STRONG = re.compile(r"(?<![\\*])\*\*(?![\s*])(.+?)(?<![\s\\])\*\*(?!\*)")
+
+
+def normalize_punctuation_strong(text: str) -> str:
+    """消除中文引号等标点与相邻正文导致的 CommonMark 加粗歧义。
+
+    Args:
+        text: 已隔离代码并完成链接转换的 Markdown；链接地址使用尖括号包裹。
+    Returns:
+        将存在标点边界歧义的成对加粗转换成 strong 标签，其余内容保持不变。
+    Raises:
+        无预期异常。
+    """
+    protected_tags: list[str] = []
+
+    def protect_tag(match: re.Match) -> str:
+        """暂存 HTML 标签和尖括号地址，避免改动图片属性、链接 URL 等内容。"""
+        protected_tags.append(match.group())
+        return f"\x00TAG{len(protected_tags) - 1}\x00"
+
+    def punctuation(character: str) -> bool:
+        """按 CommonMark 使用的 Unicode 标点及符号类别判断边界字符。"""
+        return bool(character) and unicodedata.category(character)[0] in {"P", "S"}
+
+    def replace_strong(match: re.Match) -> str:
+        """仅替换会被标点边界规则拒绝的完整加粗，不处理未闭合标记。"""
+        content = match[1]
+        previous = masked[match.start() - 1] if match.start() else ""
+        following = masked[match.end()] if match.end() < len(masked) else ""
+        # CommonMark 不允许此处的标点紧贴外侧文字作为加粗边界。
+        # 使用原生 strong 保持引号及内部 Markdown，不引入可见空格或零宽字符。
+        invalid_open = punctuation(content[0]) and bool(previous) and not previous.isspace() and not punctuation(previous)
+        invalid_close = punctuation(content[-1]) and bool(following) and not following.isspace() and not punctuation(following)
+        return f"<strong>{content}</strong>" if invalid_open or invalid_close else match.group()
+
+    masked = re.sub(r"<[^>\n]+>", protect_tag, text)
+    normalized = STRONG.sub(replace_strong, masked)
+    return re.sub(r"\x00TAG(\d+)\x00", lambda match: protected_tags[int(match[1])], normalized)
 
 
 def json_text(value: object) -> str:
@@ -146,7 +186,7 @@ class Publisher:
             self._canvas(source, bundle, uri)
         else:
             raw = source.read_text(encoding="utf-8-sig")
-            # Obsidian 元数据与 Hugo 字段不同，正文逐字保留，仅替换链接。
+            # Obsidian 元数据与 Hugo 字段不同；正文仅转换引用和有歧义的加粗标记。
             body = re.sub(r"\A---\n.*?\n---(?:\n|$)", "", raw, count=1, flags=re.S)
             meta = {"title": self.config["title"] if is_entry else source.stem,
                     "slug": bundle.name, "date": self.config["date"], "draft": False,
@@ -185,7 +225,7 @@ class Publisher:
         return quote(resource.as_posix(), safe="/-._~") + suffix, resolved
 
     def _markdown(self, text: str, source: Path, bundle: Path, uri: str) -> str:
-        """转换 WikiLinks、普通链接、引用式链接及带尺寸的图片，保留代码。"""
+        """转换引用、图片和标点边界加粗，代码片段逐字保留。"""
         protected: list[str] = []
 
         def protect(match: re.Match) -> str:
@@ -231,6 +271,7 @@ class Publisher:
         text = LINK.sub(ordinary, text)
         text = REFERENCE.sub(reference, text)
         text = WIKI.sub(wiki, text)
+        text = normalize_punctuation_strong(text)
         return re.sub(r"\x00CODE(\d+)\x00", lambda m: protected[int(m[1])], text)
 
     def _canvas(self, source: Path, bundle: Path, uri: str) -> None:
