@@ -1,0 +1,193 @@
+{
+  "nodes": [
+    {
+      "id": "6a0612d75783e9ce",
+      "type": "group",
+      "x": -640,
+      "y": 320,
+      "width": 1800,
+      "height": 1540,
+      "color": "6",
+      "label": "方法一：让git走代理"
+    },
+    {
+      "id": "518d0527586a27c8",
+      "type": "group",
+      "x": -520,
+      "y": 370,
+      "width": 1000,
+      "height": 1440,
+      "label": "第一种"
+    },
+    {
+      "id": "46fd39485a019777",
+      "type": "group",
+      "x": 1580,
+      "y": 447,
+      "width": 860,
+      "height": 489,
+      "color": "6",
+      "label": "方法二:将梯子打开全局代理模式，sourcetree使用“系统默认设置”"
+    },
+    {
+      "id": "65b4267dd41750ca",
+      "type": "group",
+      "x": 520,
+      "y": 419,
+      "width": 440,
+      "height": 841,
+      "label": "第二种"
+    },
+    {
+      "id": "c4a9c21dfe6dbbf3",
+      "type": "text",
+      "text": "切换到网络，选择“使用自定义代理”输入代理网址，跟刚刚的差不多",
+      "x": 540,
+      "y": 640,
+      "width": 360,
+      "height": 80,
+      "color": "6"
+    },
+    {
+      "id": "80d24a7563e4c63c",
+      "type": "file",
+      "file": "media/696507def29e/Git%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE_004.png",
+      "x": 540,
+      "y": 523,
+      "width": 400,
+      "height": 97
+    },
+    {
+      "id": "ff3b7ae2d6d89f19",
+      "type": "text",
+      "text": "注意，如果你是在终端配置的代理，这里就只需要选择“使用系统默认配置”即可",
+      "x": 540,
+      "y": 1140,
+      "width": 361,
+      "height": 89,
+      "color": "6"
+    },
+    {
+      "id": "98f23087c628c1c6",
+      "type": "file",
+      "file": "media/adccade8b337/Git%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE_005.png",
+      "x": 540,
+      "y": 759,
+      "width": 400,
+      "height": 353
+    },
+    {
+      "id": "36a23e871f4a6f4d",
+      "type": "file",
+      "file": "media/7f8cbed87d51/Git%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE_001.png",
+      "x": -500,
+      "y": 390,
+      "width": 399,
+      "height": 140
+    },
+    {
+      "id": "fc942fd81ce1c6d6",
+      "type": "text",
+      "text": "git config --global http.proxy http://127.0.0.1:7890\n\ngit config --global https.proxy [http://127.0.0.1:7890](<http://127.0.0.1:7890>)   这两条代码为切换代理。前面127.0.0.1应该都是一样的，后面的7890就是你的梯子端口，比如我的就是7890，每个人填写自己的。",
+      "x": -500,
+      "y": 870,
+      "width": 660,
+      "height": 140
+    },
+    {
+      "id": "f7c3b81f0d5a59ea",
+      "type": "file",
+      "file": "media/bc7df56210aa/Git%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE_002.png",
+      "x": -500,
+      "y": 650,
+      "width": 399,
+      "height": 198
+    },
+    {
+      "id": "ae4be94b57c0ace5",
+      "type": "file",
+      "file": "media/f1c835aa42ac/Git%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE_003.png",
+      "x": -500,
+      "y": 1030,
+      "width": 400,
+      "height": 302
+    },
+    {
+      "id": "3da47090b449b107",
+      "type": "text",
+      "text": "打开sourcetree上方的工具/选项\\",
+      "x": 540,
+      "y": 439,
+      "width": 250,
+      "height": 60,
+      "color": "6"
+    },
+    {
+      "id": "931a2a7e9e43b591",
+      "type": "text",
+      "text": "进入到这个页面\n\n注意，gitbash复制粘贴的快捷键不是ctrl+c 和 ctrl+v,直接右键copy/paste",
+      "x": -500,
+      "y": 530,
+      "width": 400,
+      "height": 120
+    },
+    {
+      "id": "ab50025d5927df0d",
+      "type": "text",
+      "text": "在使用sourcetree拉取队友分支，或者从远端获取更新时，要么就是报错，显示网络连接失败，要么就是拉取了10几分钟，最后显示网络连接失败，连接不到github。然后切换不同的节点，依然不稳定，就跟开盲盒一样。\n\n可是我明明开了梯子，按理来说不会出现网络连接失败，为什么呢？  \n\n问题不在于你的梯子软件，也不是sourcetree，而是因为git，git默认不走代理，也就是说不管你开不开梯子，它始终用的是国内的网去访问github，所以经常会连不上。sourcetree只是个图形化管理软件,不管网络的事。",
+      "x": 900,
+      "y": -200,
+      "width": 700,
+      "height": 220,
+      "color": "6"
+    },
+    {
+      "id": "1e8570df783494b9",
+      "type": "text",
+      "text": "git config --global --get http.proxy\n\ngit config --global --get https.proxy\n\n这两条代码为检查是否切换成功，如果输出\n\n[http://127.0.0.1:7890](<http://127.0.0.1:7890>)，就说明切换成功了\n\n最后是\n\ngit ls-remote [https://github.com/CokieQ/2D-Pixel-Action-Game.git](<https://github.com/CokieQ/2D-Pixel-Action-Game.git>)，测试 Git 是否能正常访问 GitHub\n\n如果和图片一样出现一堆，那就是连接成功了\n\nxxxxxxxx HEAD  \nxxxxxxxx refs/heads/main  \nxxxxxxxx refs/heads/mini-game\n\n……",
+      "x": -500,
+      "y": 1350,
+      "width": 920,
+      "height": 440
+    },
+    {
+      "id": "5ae817952487d42c",
+      "type": "file",
+      "file": "media/602bb42d5b14/Git%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE_006.png",
+      "x": 1800,
+      "y": 608,
+      "width": 400,
+      "height": 302
+    },
+    {
+      "id": "57cec07eec7cdf48",
+      "type": "text",
+      "text": "**如图所示，但这个方法会导致你用浏览器访问其它网站会变得非常卡**",
+      "x": 1814,
+      "y": 469,
+      "width": 371,
+      "height": 93,
+      "color": "6"
+    }
+  ],
+  "edges": [
+    {
+      "id": "da79114abfba2692",
+      "fromNode": "6a0612d75783e9ce",
+      "fromSide": "top",
+      "toNode": "ab50025d5927df0d",
+      "toSide": "bottom",
+      "color": "6",
+      "label": "方法一（推荐）"
+    },
+    {
+      "id": "2a1d7eaf99d348ec",
+      "fromNode": "46fd39485a019777",
+      "fromSide": "top",
+      "toNode": "ab50025d5927df0d",
+      "toSide": "bottom",
+      "color": "6",
+      "label": "方法二"
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{{/*
+    Canvas 通用阅读页面，使用本地打包的 JSON Canvas Viewer。
+    参数：当前 Canvas 页面，包含 article_ref、canvas_nodes 和 canvas_edges。
+    输出：完整画布、阅读工具、数据下载与返回原文入口，配色沿用 Stack。
+    异常：生成数据或原文页面缺失时使构建失败，避免发布失效链接。
+*/}}
+{{ define "body-class" }}canvas-page{{ end }}
+{{ define "left-sidebar" }}<span hidden aria-hidden="true"></span>{{ end }}
+{{ define "head" }}
+    {{- $options := dict "targetPath" "js/canvas-reader.js" "format" "esm" "target" "es2020" "minify" hugo.IsProduction -}}
+    {{- $reader := resources.Get "js/canvas-reader.js" | js.Build $options | fingerprint -}}
+    <script type="module" src="{{ $reader.RelPermalink }}" integrity="{{ $reader.Data.Integrity }}" crossorigin="anonymous"></script>
+    <link rel="license" href="{{ "licenses/canvas-reader/NOTICE.txt" | relURL }}">
+{{ end }}
+{{ define "main" }}
+    <section id="canvas-reader" class="canvas-reader" aria-label="{{ .Title }}，只读画布">
+        <header class="canvas-header">
+            {{ with .Site.GetPage .Params.article_ref }}
+                <a class="canvas-back" href="{{ .RelPermalink }}">← 返回文章</a>
+            {{ else }}
+                {{ errorf "Canvas 原文页面不存在：%s" .Params.article_ref }}
+            {{ end }}
+            <div class="canvas-heading">
+                <h1>{{ .Title }}</h1>
+                <p>{{ .Params.canvas_nodes }} 个节点 · {{ .Params.canvas_edges }} 条连线 · 只读</p>
+            </div>
+            <button id="dark-mode-toggle" type="button" aria-label="切换亮色与暗色模式">切换配色</button>
+        </header>
+        <div class="canvas-toolbar" role="group" aria-label="画布查看工具">
+            <button type="button" data-action="out" aria-label="缩小画布" disabled>−</button>
+            <output id="canvas-scale" aria-label="当前缩放比例">—</output>
+            <button type="button" data-action="in" aria-label="放大画布" disabled>＋</button>
+            <button type="button" data-action="fit" disabled>适应屏幕</button>
+            <button type="button" data-action="actual" disabled>100%</button>
+            <button type="button" data-action="fullscreen" aria-pressed="false" disabled>全屏</button>
+            {{ with .Resources.Get "data.canvas" }}
+                <a href="{{ .RelPermalink }}" download>下载数据</a>
+            {{ else }}
+                {{ errorf "Canvas 数据不存在：%s" .Path }}
+            {{ end }}
+        </div>
+        <p id="canvas-help" class="canvas-help">滚轮缩放 · 拖拽平移 · 点击节点后可滚动正文、打开链接 · 双指缩放</p>
+        {{ with .Resources.Get "data.canvas" }}
+            <div id="canvas-host" class="canvas-host" data-source="{{ .RelPermalink }}" tabindex="0" aria-label="交互式画布" aria-describedby="canvas-help" aria-busy="true"></div>
+        {{ end }}
+        <p id="canvas-status" class="canvas-status" role="status" aria-live="polite">正在加载画布…</p>
+        <noscript><p class="canvas-status">交互阅读需要启用 JavaScript，你也可以下载 Canvas 数据。</p></noscript>
+    </section>
+{{ end }}

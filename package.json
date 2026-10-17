@@ -1,0 +1,8 @@
+{
+  "name": "cokiez-blog-assets",
+  "private": true,
+  "description": "Hugo 博客的 Canvas 阅读器依赖，由 Hugo 内置 esbuild 打包。",
+  "dependencies": {
+    "json-canvas-viewer": "4.3.2"
+  }
+}

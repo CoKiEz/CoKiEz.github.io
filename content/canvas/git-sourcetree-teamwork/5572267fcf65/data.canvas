@@ -1,0 +1,137 @@
+{
+  "nodes": [
+    {
+      "id": "956b70153d355ca6",
+      "type": "text",
+      "text": "每个成员都需要在正式开发之前配置好，记住是每个人！！！\n因为这是本地的操作。",
+      "x": -265,
+      "y": 0,
+      "width": 485,
+      "height": 59,
+      "color": "6"
+    },
+    {
+      "id": "b010819f4177e600",
+      "type": "file",
+      "file": "media/da6d8728f4ad/UnityYAML%20Merge_002.png",
+      "x": 380,
+      "y": 185,
+      "width": 573,
+      "height": 335,
+      "color": "6"
+    },
+    {
+      "id": "2411ee672bf8028f",
+      "type": "file",
+      "file": "media/eabf9a08d238/UnityYAML%20Merge_003.png",
+      "x": 380,
+      "y": 720,
+      "width": 573,
+      "height": 369,
+      "color": "6"
+    },
+    {
+      "id": "feb75d84d7c2b4a9",
+      "type": "text",
+      "text": "根据路径XXXXX/Editor/Data/Tools\n往下找就找的到了",
+      "x": 380,
+      "y": 620,
+      "width": 280,
+      "height": 100,
+      "color": "6"
+    },
+    {
+      "id": "0b0d204d56162bb1",
+      "type": "file",
+      "file": "media/1709ab9e24f1/UnityYAML%20Merge_001.png",
+      "x": -523,
+      "y": 835,
+      "width": 588,
+      "height": 440,
+      "color": "6"
+    },
+    {
+      "id": "f54c66f5d3794f3a",
+      "type": "file",
+      "file": "media/962495835ade/UnityYAML%20Merge_004.png",
+      "x": -565,
+      "y": 330,
+      "width": 673,
+      "height": 380
+    },
+    {
+      "id": "06522bdacd60f465",
+      "type": "text",
+      "text": "参数：merge -p \"$REMOTE\" \"$BASE\" \"$LOCAL\" \"$MERGED\"（或者让AI给你）",
+      "x": -320,
+      "y": 1241,
+      "width": 336,
+      "height": 69,
+      "color": "6"
+    },
+    {
+      "id": "3ace4b25b71528ae",
+      "type": "text",
+      "text": "但是现在呢Unity2022以上的版本默认都是Force Text了，你们检查一下就行",
+      "x": -415,
+      "y": 600,
+      "width": 374,
+      "height": 70,
+      "color": "6"
+    },
+    {
+      "id": "6c819668c08cadbe",
+      "type": "text",
+      "text": "UnityYAML Merge是Unity自带的一个智能合并工具，需要自己手动开启，是专门用来合并Scene，Prefab等资源文件的，专门用来解决scene/prefab冲突，因为这些基本没法手动更改。\n\n举个简单的例子，如果成员A对物体修改了位置，成员B对物体添加了脚本，后续合并的时候可能会冲突爆炸。\n\n无论怎么样，主场景最好还是一个人负责，其他人就各自在自己的分支场景上开发功能就可以了。如果搭配一个Persistent Scene+多个Addictive Scenes开发模式更好\n\n",
+      "x": -365,
+      "y": -280,
+      "width": 686,
+      "height": 240,
+      "color": "6"
+    }
+  ],
+  "edges": [
+    {
+      "id": "86a7232925b949a2",
+      "fromNode": "b010819f4177e600",
+      "fromSide": "bottom",
+      "toNode": "2411ee672bf8028f",
+      "toSide": "top",
+      "color": "6"
+    },
+    {
+      "id": "be854c526e2993f6",
+      "fromNode": "6c819668c08cadbe",
+      "fromSide": "bottom",
+      "toNode": "956b70153d355ca6",
+      "toSide": "top",
+      "color": "6"
+    },
+    {
+      "id": "7147e996eff309cc",
+      "fromNode": "b010819f4177e600",
+      "fromSide": "left",
+      "toNode": "0b0d204d56162bb1",
+      "toSide": "right",
+      "color": "6",
+      "label": "路径查找"
+    },
+    {
+      "id": "d1f1a07d77ee5d87",
+      "fromNode": "f54c66f5d3794f3a",
+      "fromSide": "bottom",
+      "toNode": "0b0d204d56162bb1",
+      "toSide": "top",
+      "color": "6"
+    },
+    {
+      "id": "b8a9f8ee4d34e27a",
+      "fromNode": "f54c66f5d3794f3a",
+      "fromSide": "top",
+      "toNode": "956b70153d355ca6",
+      "toSide": "bottom",
+      "color": "6",
+      "label": "配置"
+    }
+  ]
+}

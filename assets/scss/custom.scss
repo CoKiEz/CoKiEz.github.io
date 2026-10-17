@@ -1,3 +1,77 @@
-/*
-    You can add your own custom styles here.
-*/
+/* 原文可能从一级直接跳到三级标题，隐藏 Hugo 为缺失层级生成的空列表标记。 */
+.toc-nav ul.obsidian-toc { list-style: none; }
+.toc-nav ul.obsidian-toc li:not(:has(> a)) { margin: 0; padding: 0; }
+
+/* Canvas 使用独立布局；所有覆盖仅作用于阅读页面，不改变文章或主题侧栏。 */
+.canvas-page {
+    .main-container { max-width: none; padding: 16px; margin: 0; box-sizing: border-box; }
+    .main { min-width: 0; padding-top: 0; }
+    .canvas-reader {
+        display: flex;
+        flex-direction: column;
+        height: calc(100dvh - 32px);
+        min-height: 420px;
+        box-sizing: border-box;
+        padding: 18px;
+        border-radius: var(--card-border-radius);
+        background: var(--card-background);
+        color: var(--card-text-color-main);
+        box-shadow: var(--shadow-l1);
+    }
+    .canvas-header { display: flex; align-items: center; gap: 20px; }
+    .canvas-heading { flex: 1; min-width: 0; }
+    .canvas-heading h1 { margin: 0 0 6px; font-size: 2.2rem; overflow-wrap: anywhere; }
+    .canvas-heading p { margin: 0; color: var(--card-text-color-secondary); font-size: 1.3rem; }
+    .canvas-back { white-space: nowrap; }
+    button, .canvas-toolbar a, .canvas-back {
+        border: 1px solid var(--card-separator-color);
+        border-radius: 8px;
+        padding: 9px 12px;
+        background: var(--body-background);
+        color: var(--card-text-color-main);
+        cursor: pointer;
+        font: inherit;
+        font-size: 1.4rem;
+    }
+    button:hover, .canvas-toolbar a:hover, .canvas-back:hover { background: var(--card-background-selected); }
+    button:disabled { opacity: .45; cursor: wait; }
+    button:focus-visible, a:focus-visible, .canvas-host:focus-visible { outline: 2px solid var(--accent-color); outline-offset: 3px; }
+    .canvas-toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .canvas-toolbar output { min-width: 55px; text-align: center; font-size: 1.4rem; font-variant-numeric: tabular-nums; }
+    .canvas-toolbar a { margin-left: auto; }
+    .canvas-help { font-size: 1.3rem; color: var(--card-text-color-secondary); margin: 10px 0; }
+    .canvas-host { flex: 1; min-height: 200px; overflow: hidden; border-radius: 10px; border: 1px solid var(--card-separator-color); }
+    .canvas-status { margin: 10px 0 0; font-size: 1.4rem; }
+    .canvas-status:empty { display: none; }
+    .canvas-reader:fullscreen, .canvas-reader.canvas-expanded { height: 100dvh; width: 100%; border-radius: 0; box-sizing: border-box; }
+    .canvas-expanded { position: fixed; inset: 0; z-index: 10000; }
+
+    /* 覆盖上游截图裁切、默认字体和链接样式，使长截图和中文文字完整可读。 */
+    .JSON-Canvas-Viewer {
+        font-size: 16px;
+        .JCV-overlay-container .JCV-img { object-fit: contain; }
+        .JCV-parsed-content-wrapper { font-family: var(--base-font-family); }
+        .JCV-markdown-content strong, .JCV-markdown-content em { color: inherit; }
+        .JCV-markdown-content a { color: var(--accent-color); font-style: normal; }
+        .JCV-markdown-content pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+        .JCV-markdown-content code { font-family: var(--code-font-family); }
+        .JCV-markdown-content p { white-space: normal; }
+        .canvas-link-card { padding: 20px; overflow-wrap: anywhere; display: flex; flex-direction: column; gap: 16px; }
+        .canvas-link-card a { color: var(--accent-color); text-decoration: underline; }
+        .canvas-link-card p { margin: 0; font-size: 14px; }
+        .canvas-original-image { position: absolute; right: 12px; bottom: 12px; border-radius: 6px; padding: 8px; background: var(--background-secondary); color: var(--text); opacity: 0; pointer-events: none; }
+        .JCV-active .canvas-original-image { opacity: 1; pointer-events: auto; }
+        .canvas-node-notice { position: absolute; inset: 12px; }
+    }
+    @media (max-width: 600px) {
+        .main-container { padding: 6px; }
+        .canvas-reader { height: calc(100dvh - 12px); padding: 12px; }
+        .canvas-header { flex-wrap: wrap; gap: 10px; }
+        .canvas-heading { flex-basis: calc(100% - 130px); order: -1; }
+        .canvas-heading h1 { font-size: 1.8rem; }
+        .canvas-back { order: 1; }
+        .canvas-toolbar { margin-top: 10px; gap: 6px; }
+        .canvas-toolbar a { margin-left: 0; }
+        button, .canvas-toolbar a, .canvas-back { padding: 8px 10px; }
+    }
+}

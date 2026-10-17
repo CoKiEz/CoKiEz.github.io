@@ -1,0 +1,10 @@
+{
+  "source_root": "imports/obsidian/Git工作流",
+  "entry": "Git+Sourcetree多人协作教程.md",
+  "slug": "git-sourcetree-teamwork",
+  "title": "Git+Sourcetree多人协作教程",
+  "date": "2026-04-12T00:00:00+08:00",
+  "description": "使用 Git 与 Sourcetree 进行 Unity 多人协作：仓库配置、功能分支、合并冲突与版本回溯。",
+  "categories": ["工具链"],
+  "tags": ["技术栈", "工具链", "Git", "Sourcetree", "Unity"]
+}

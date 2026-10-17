@@ -1,0 +1,15 @@
+{{/*
+    生成与正文标题一致的目录，Obsidian 导入文章包含一级标题且只保留原文编号。
+    参数：当前文章页面。
+    返回：不含外层 nav 的目录 HTML，供 Stack 的桌面和移动目录共用。
+    异常：无；普通文章沿用站点默认目录配置。
+*/}}
+{{- $toc := .TableOfContents -}}
+{{- if .Params.obsidian_generated -}}
+    {{/* 无序列表避免 Stack 的 CSS 计数器叠加标题自身的 1.、3.1 等编号。 */}}
+    {{- $toc = .Fragments.ToHTML 1 6 false -}}
+    {{- $toc = replace $toc "<ul>" "<ul class=\"obsidian-toc\">" -}}
+{{- end -}}
+{{- $toc = replace $toc "<nav id=\"TableOfContents\">" "" -}}
+{{- $toc = replace $toc "</nav>" "" -}}
+{{- return $toc -}}

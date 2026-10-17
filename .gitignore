@@ -3,3 +3,10 @@ resources
 .hugo_build.lock
 .DS_Store
 assets/jsconfig.json
+# 本地导入源与验收产物不进入博客发布仓库，仅提交转换后的依赖。
+imports/obsidian/
+.cache/
+.artifacts/
+scripts/__pycache__/
+# 浏览器阅读器由 Hugo 打包，提交锁文件即可复现依赖。
+node_modules/

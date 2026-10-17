@@ -1,0 +1,188 @@
+{
+  "nodes": [
+    {
+      "id": "530ba4f4bbcf5e16",
+      "type": "group",
+      "x": -2520,
+      "y": 280,
+      "width": 1220,
+      "height": 1558,
+      "color": "6",
+      "label": "Git LFS的配置"
+    },
+    {
+      "id": "f8700c9f0076da16",
+      "type": "file",
+      "file": "media/d23bc3f79c34/%E5%88%9D%E5%A7%8B%E5%8C%96_002.png",
+      "x": 320,
+      "y": -166,
+      "width": 500,
+      "height": 441,
+      "color": "6"
+    },
+    {
+      "id": "802c320885d280c1",
+      "type": "file",
+      "file": "media/28d57b5ef005/%E5%88%9D%E5%A7%8B%E5%8C%96_005.png",
+      "x": -720,
+      "y": 739,
+      "width": 1225,
+      "height": 477,
+      "color": "6"
+    },
+    {
+      "id": "d28448fbdf059ecd",
+      "type": "file",
+      "file": "media/349bd0c9b638/%E5%88%9D%E5%A7%8B%E5%8C%96_006.png",
+      "x": -720,
+      "y": 1560,
+      "width": 1252,
+      "height": 600,
+      "color": "6"
+    },
+    {
+      "id": "26fab525305c8bb2",
+      "type": "file",
+      "file": "media/2dea5bae9055/%E5%88%9D%E5%A7%8B%E5%8C%96_001.png",
+      "x": -880,
+      "y": -195,
+      "width": 851,
+      "height": 499,
+      "color": "6"
+    },
+    {
+      "id": "03775e6b0cd942b3",
+      "type": "file",
+      "file": "media/036f656b5254/GitLFS%E9%85%8D%E7%BD%AE_002.png",
+      "x": -2480,
+      "y": 1140,
+      "width": 559,
+      "height": 678,
+      "color": "6"
+    },
+    {
+      "id": "074391b362ee8466",
+      "type": "file",
+      "file": "media/3a5f1b0934e9/GitLFS%E9%85%8D%E7%BD%AE_001.png",
+      "x": -2500,
+      "y": 300,
+      "width": 599,
+      "height": 680,
+      "color": "6"
+    },
+    {
+      "id": "3c19c4a882558826",
+      "type": "text",
+      "text": "如果没有可选的文件后缀，手动输入即可。\n如果不知道选什么，可以直接选上这些常见的文件。",
+      "x": -2180,
+      "y": 1500,
+      "width": 300,
+      "height": 124,
+      "color": "6"
+    },
+    {
+      "id": "0b36489532764656",
+      "type": "text",
+      "text": "Git LFS:\n原生Git因为底层机制，对于二进制文件（图片，影像等等），会造成非常大的存储负担。\n因此需要将这些二进制文件放到另一个“特殊仓库”中存储，也就是Git LFS。\n根据项目所需要的文件，配置完即可。\n注意：这个配置只对新文件有效，也就是说，在配置Git LFS之前上传的文件素材是不会收到Git LFS管理的。所以开局配置好万无一失了。\n\n\n",
+      "x": -1880,
+      "y": 370,
+      "width": 480,
+      "height": 270
+    },
+    {
+      "id": "f10d8e5304ff0036",
+      "type": "file",
+      "file": "media/02e770acd8f1/GitLFS%E9%85%8D%E7%BD%AE_003.png",
+      "x": -1820,
+      "y": 1479,
+      "width": 501,
+      "height": 222
+    },
+    {
+      "id": "6dd8eb4d7b2fd338",
+      "type": "file",
+      "file": "media/6f78c0ca0363/%E5%88%9D%E5%A7%8B%E5%8C%96_004.png",
+      "x": 908,
+      "y": 600,
+      "width": 1172,
+      "height": 616,
+      "color": "6"
+    },
+    {
+      "id": "b4e3413134e87213",
+      "type": "file",
+      "file": "media/4578ca2f4888/%E5%88%9D%E5%A7%8B%E5%8C%96_003.png",
+      "x": 1280,
+      "y": -166,
+      "width": 800,
+      "height": 492,
+      "color": "6"
+    }
+  ],
+  "edges": [
+    {
+      "id": "37f14c7c8971cb7b",
+      "fromNode": "26fab525305c8bb2",
+      "fromSide": "right",
+      "toNode": "f8700c9f0076da16",
+      "toSide": "left",
+      "color": "6"
+    },
+    {
+      "id": "39ff90a1a9f78326",
+      "fromNode": "f8700c9f0076da16",
+      "fromSide": "right",
+      "toNode": "b4e3413134e87213",
+      "toSide": "left",
+      "color": "6"
+    },
+    {
+      "id": "7b685b0ffbf3db28",
+      "fromNode": "b4e3413134e87213",
+      "fromSide": "right",
+      "toNode": "6dd8eb4d7b2fd338",
+      "toSide": "right",
+      "color": "6"
+    },
+    {
+      "id": "d9eaa72615746019",
+      "fromNode": "6dd8eb4d7b2fd338",
+      "fromSide": "left",
+      "toNode": "802c320885d280c1",
+      "toSide": "right",
+      "color": "6"
+    },
+    {
+      "id": "c93aa89818ba16b8",
+      "fromNode": "802c320885d280c1",
+      "fromSide": "bottom",
+      "toNode": "d28448fbdf059ecd",
+      "toSide": "top",
+      "color": "6"
+    },
+    {
+      "id": "ab89ea8e7e002364",
+      "fromNode": "074391b362ee8466",
+      "fromSide": "bottom",
+      "toNode": "03775e6b0cd942b3",
+      "toSide": "top",
+      "color": "6"
+    },
+    {
+      "id": "c99ea336e0da9337",
+      "fromNode": "530ba4f4bbcf5e16",
+      "fromSide": "right",
+      "toNode": "802c320885d280c1",
+      "toSide": "left",
+      "color": "6"
+    },
+    {
+      "id": "4b694aaef60b2684",
+      "fromNode": "f10d8e5304ff0036",
+      "fromSide": "left",
+      "toNode": "3c19c4a882558826",
+      "toSide": "right",
+      "color": "6"
+    }
+  ]
+}

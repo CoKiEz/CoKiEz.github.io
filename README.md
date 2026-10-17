@@ -4,6 +4,10 @@
 
 本站使用 Hugo + [Stack](https://github.com/CaiJimmy/hugo-theme-stack)，通过 GitHub Actions 部署到 GitHub Pages。文章写在 `content/post/`，每篇文章一个文件夹，正文使用 Markdown。
 
+Obsidian 笔记的转换、公开范围、Canvas 数据及阶段验收见 [Obsidian 发布记录](docs/obsidian-publishing.md)。
+
+首次拉取项目或 `package-lock.json` 更新后，先在仓库目录执行 `npm ci --ignore-scripts` 安装 Canvas 阅读器依赖；随后照常使用 Hugo 构建与预览，阅读器由 Hugo 自动打包。
+
 ## 1. 新建文章
 
 在仓库目录打开 PowerShell：
