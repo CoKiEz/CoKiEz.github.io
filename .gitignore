@@ -10,3 +10,5 @@ imports/obsidian/
 scripts/__pycache__/
 # 浏览器阅读器由 Hugo 打包，提交锁文件即可复现依赖。
 node_modules/
+# 验收记录、开发说明和审阅清单仅保存在本地，不进入 GitHub 或发布产物。
+/[Dd]ocs/

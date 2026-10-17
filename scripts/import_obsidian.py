@@ -279,7 +279,8 @@ class Publisher:
                   "sources": dict(sorted(self.sources.items())),
                   "outputs": dict(sorted(self.outputs.items())), "canvases": self.canvas_stats,
                   "missing_assets": sorted(self.missing)}
-        manifest = REPO / "scripts" / "obsidian-publication-manifest.json"
+        manifest = REPO / "Docs" / "obsidian-publication-manifest.json"
+        manifest.parent.mkdir(parents=True, exist_ok=True)
         manifest.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         return result
 

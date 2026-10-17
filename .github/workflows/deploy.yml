@@ -64,8 +64,9 @@ jobs:
           echo "Hugo: $(hugo version)"
           echo "Node.js: $(node --version)"
       - name: Install Node.js dependencies
+        # 阅读器依赖已固定；安装失败必须中止，避免用缺失依赖继续构建。
         run: |
-          [[ -f package-lock.json || -f npm-shrinkwrap.json ]] && npm ci || true
+          npm ci --ignore-scripts --no-audit --no-fund
       - name: Configure Git
         run: |
           git config core.quotepath false
