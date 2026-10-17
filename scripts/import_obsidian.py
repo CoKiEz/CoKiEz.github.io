@@ -18,13 +18,41 @@ from urllib.parse import quote, unquote, urlsplit
 REPO = Path(__file__).resolve().parents[1]
 IMAGE_TYPES = {".png", ".jpg", ".jpeg", ".gif", ".webp", ".svg", ".avif"}
 # 将代码先隔离，避免把示例代码中的链接当成待发布的依赖。
-CODE = re.compile(r"(?m)^ {0,3}(`{3,}|~{3,})[^\n]*\n[\s\S]*?^ {0,3}\1[ \t]*(?=\n|$)|(`+)[^\n]*?\2")
+FENCED_CODE = re.compile(r"(?m)^ {0,3}(`{3,}|~{3,})[^\n]*\n[\s\S]*?^ {0,3}\1[ \t]*(?=\n|$)")
+CODE = re.compile(FENCED_CODE.pattern + r"|(`+)[^\n]*?\2")
+# Obsidian 中用整行加粗写出的冲突示例需要明确的代码块，不能依赖段落软换行。
+CONFLICT_EXAMPLE = re.compile(
+    r"(?m)^ {0,3}\*\*<{5,}[^\n]*\*\*[ \t]*\n"
+    r"(?: {0,3}\*\*[^\n]+\*\*[ \t]*\n)*?"
+    r" {0,3}\*\*>{5,}[^\n]*\*\*[ \t]*(?=\n|$)"
+)
 WIKI = re.compile(r"(!?)\[\[([^\]\n]+)\]\]")
 # 支持尖括号地址及一层嵌套括号；更深的 Markdown 地址应使用尖括号写法。
 LINK = re.compile(r'(!?\[[^\]\n]*\]\()(<[^>\n]+>|(?:[^\s()]|\([^()]*\))+)([ \t]+["\'][^\n]*?["\'])?\)')
 REFERENCE = re.compile(r"(?m)^( {0,3}\[[^\]\n]+\]:[ \t]*)(<[^>\n]+>|\S+)")
 # 只识别非转义的成对双星号，跳过三重星号以及内容首尾的空白。
 STRONG = re.compile(r"(?<![\\*])\*\*(?![\s*])(.+?)(?<![\s\\])\*\*(?!\*)")
+
+
+def normalize_conflict_examples(text: str) -> str:
+    """将完整的加粗冲突示例转换为保留逐行结构的纯文本代码块。
+
+    Args:
+        text: 已隔离现有围栏代码块的 Markdown。
+    Returns:
+        包含起始标记、分隔符和结束标记的示例转为 text 代码块；其他内容不变。
+    Raises:
+        无预期异常。
+    """
+    def replace_example(match: re.Match) -> str:
+        """去掉示例每行外层的加粗装饰，保留行内空格与原有说明。"""
+        lines = [re.sub(r"^ {0,3}\*\*(.*?)\*\*[ \t]*$", r"\1", line) for line in match.group().splitlines()]
+        if not any(re.match(r"^={5,}(?:[ \t]|$)", line) for line in lines):
+            return match.group()
+        # 在代码块两侧显式分段，避免前后说明被并入同一段落。
+        return "\n```text\n" + "\n".join(lines) + "\n```\n"
+
+    return CONFLICT_EXAMPLE.sub(replace_example, text)
 
 
 def normalize_punctuation_strong(text: str) -> str:
@@ -225,7 +253,7 @@ class Publisher:
         return quote(resource.as_posix(), safe="/-._~") + suffix, resolved
 
     def _markdown(self, text: str, source: Path, bundle: Path, uri: str) -> str:
-        """转换引用、图片和标点边界加粗，代码片段逐字保留。"""
+        """转换引用、图片、冲突示例和标点边界加粗，现有代码片段逐字保留。"""
         protected: list[str] = []
 
         def protect(match: re.Match) -> str:
@@ -266,6 +294,10 @@ class Publisher:
             url, _ = self._target(target.strip("<>"), source, bundle, uri)
             return f"{prefix}<{url}>"
 
+        # 先保护原有围栏，再规范误写为加粗段落的冲突示例。
+        # 最后统一保护新增代码块与行内代码，避免转换其中的 WikiLink 或星号。
+        text = FENCED_CODE.sub(protect, text)
+        text = normalize_conflict_examples(text)
         text = CODE.sub(protect, text)
         # 普通链接先处理，防止 WikiLink 的生成结果被重复解析。
         text = LINK.sub(ordinary, text)

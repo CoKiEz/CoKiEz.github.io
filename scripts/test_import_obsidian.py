@@ -50,6 +50,20 @@ class ImportCompatibilityTest(unittest.TestCase):
         text = '`[[不存在.md]]`\n\n```md\n![[不存在.png]]\n```\n\n~~~md\n[x](不存在.md)\n~~~\n'
         self.assertEqual(self.publisher._markdown(text, self.source, self.bundle, "/p/test-import/"), text)
 
+    def test_conflict_example_preserves_lines_and_literal_content(self) -> None:
+        """验证五行冲突示例生成代码块，且其中的行内代码与 WikiLink 不会被转换。"""
+        text = '说明\n**<<<<< HEAD** \n**当前分支 `main` 的内容**\n**===== 冲突分隔符**\n**![[不存在.png]]**\n**>>>>>feature/UI**\n后续说明'
+        expected = '说明\n\n```text\n<<<<< HEAD\n当前分支 `main` 的内容\n===== 冲突分隔符\n![[不存在.png]]\n>>>>>feature/UI\n```\n\n后续说明'
+        self.assertEqual(self.publisher._markdown(text, self.source, self.bundle, "/p/test-import/"), expected)
+
+    def test_existing_and_incomplete_conflict_examples_stay_unchanged(self) -> None:
+        """验证现有围栏中的示例原样保留，缺少分隔符或结束标记时不误判。"""
+        complete = '**<<<<< HEAD**\n**===== 冲突分隔符**\n**>>>>>feature/UI**'
+        examples = [f'```markdown\n{complete}\n```\n', '**<<<<< HEAD**\n**当前内容**\n**>>>>>feature/UI**', '**<<<<< HEAD**\n**===== 冲突分隔符**']
+        for text in examples:
+            with self.subTest(text=text):
+                self.assertEqual(self.publisher._markdown(text, self.source, self.bundle, "/p/test-import/"), text)
+
     def test_vault_relative_and_parent_relative_paths(self) -> None:
         """验证笔记库前缀和相对于当前 Markdown 的父目录引用。"""
         child = self.root / "notes" / "child.md"
